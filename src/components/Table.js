@@ -1,8 +1,15 @@
 import React from 'react';
 import { usePlanet } from '../context/PlanetContext';
+import { useFilter } from '../context/FilterContext';
 
 export default function Table() {
   const { planets } = usePlanet();
+  const { nameToFilterBy } = useFilter();
+
+  const filteredPlanets = planets.filter((planet) => (
+    planet.name.includes(nameToFilterBy)
+  ));
+
   return (
     <table>
       <thead>
@@ -23,7 +30,7 @@ export default function Table() {
         </tr>
       </thead>
       <tbody>
-        {planets.map((planet) => (
+        {filteredPlanets.map((planet) => (
           <tr key={ planet.name }>
             <td>{planet.name}</td>
             <td>{planet.rotation_period}</td>
