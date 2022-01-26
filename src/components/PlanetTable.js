@@ -3,12 +3,27 @@ import PlanetRow from './PlanetRow';
 import { usePlanet } from '../context/PlanetContext';
 import { useFilter } from '../context/FilterContext';
 
-export default function Table() {
+function isPlanetFilterable(numericFilters, planet) {
+  return numericFilters.every(({ columnLabel, comparisonType, value }) => {
+    switch (comparisonType) {
+    case 'maior que':
+      return Number(planet[columnLabel]) > Number(value);
+    case 'menor que':
+      return Number(planet[columnLabel]) < Number(value);
+    case 'igual a':
+      return Number(planet[columnLabel]) === Number(value);
+    default:
+      return false;
+    }
+  });
+}
+
+export default function PlanetTable() {
   const { planets } = usePlanet();
-  const { nameToFilterBy } = useFilter();
+  const { numericFilters, nameToFilterBy } = useFilter();
 
   const filteredPlanets = planets.filter((planet) => (
-    planet.name.includes(nameToFilterBy)
+    isPlanetFilterable(numericFilters, planet) && planet.name.includes(nameToFilterBy)
   ));
 
   return (

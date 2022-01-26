@@ -9,9 +9,21 @@ export function useFilter() {
 
 export function FilterProvider({ children }) {
   const [nameToFilterBy, setNameToFilterBy] = useState('');
+  const [numericFilters, setNumericFilters] = useState([]);
+
+  function addNumericFilter(numericFilter) {
+    setNumericFilters([...numericFilters, numericFilter]);
+  }
 
   return (
-    <FilterContext.Provider value={ { nameToFilterBy, setNameToFilterBy } }>
+    <FilterContext.Provider
+      value={ {
+        nameToFilterBy,
+        setNameToFilterBy,
+        numericFilters,
+        addNumericFilter,
+      } }
+    >
       {children}
     </FilterContext.Provider>
   );
