@@ -1,4 +1,5 @@
 import React from 'react';
+import PlanetRow from './PlanetRow';
 import { usePlanet } from '../context/PlanetContext';
 import { useFilter } from '../context/FilterContext';
 
@@ -31,21 +32,7 @@ export default function Table() {
       </thead>
       <tbody>
         {filteredPlanets.map((planet) => (
-          <tr key={ planet.name }>
-            <td>{planet.name}</td>
-            <td>{planet.rotation_period}</td>
-            <td>{planet.orbital_period}</td>
-            <td>{planet.diameter}</td>
-            <td>{planet.climate}</td>
-            <td>{planet.gravity}</td>
-            <td>{planet.terrain}</td>
-            <td>{planet.surface_water}</td>
-            <td>{planet.population}</td>
-            <td>{planet.films}</td>
-            <td>{planet.created}</td>
-            <td>{planet.edited}</td>
-            <td>{planet.url}</td>
-          </tr>
+          <PlanetRow key={ planet.name } planet={ planet } />
         ))}
       </tbody>
     </table>
