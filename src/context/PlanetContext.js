@@ -1,20 +1,18 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
+import fetchPlanets from '../services/fetchPlanets';
 
 const PlanetContext = createContext();
+
+export function usePlanet() {
+  return useContext(PlanetContext);
+}
 
 export function PlanetProvider({ children }) {
   const [planets, setPlanets] = useState([]);
 
   useEffect(() => {
-    async function fetchPlanets() {
-      const response = await fetch(
-        'https://swapi-trybe.herokuapp.com/api/planets/',
-      );
-      const data = await response.json();
-      setPlanets(data.results);
-    }
-    fetchPlanets();
+    fetchPlanets().then(setPlanets);
   }, []);
 
   return (
@@ -27,7 +25,3 @@ export function PlanetProvider({ children }) {
 PlanetProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
-
-export function usePlanet() {
-  return useContext(PlanetContext);
-}
