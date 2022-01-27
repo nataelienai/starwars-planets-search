@@ -9,10 +9,10 @@ export function useFilter() {
 
 export function FilterProvider({ children }) {
   const [nameToFilterBy, setNameToFilterBy] = useState('');
-  const [numericFilters, setNumericFilters] = useState([]);
+  const [activeNumericFilters, setActiveNumericFilters] = useState([]);
 
   function addNumericFilter(numericFilter) {
-    setNumericFilters([...numericFilters, numericFilter]);
+    setActiveNumericFilters([...activeNumericFilters, numericFilter]);
   }
 
   return (
@@ -20,7 +20,7 @@ export function FilterProvider({ children }) {
       value={ {
         nameToFilterBy,
         setNameToFilterBy,
-        numericFilters,
+        activeNumericFilters,
         addNumericFilter,
       } }
     >

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFilter } from '../context/FilterContext';
 
 const NUMERIC_COLUMN_LABELS = [
@@ -16,13 +16,32 @@ const COMPARISON_TYPES = [
 ];
 
 export default function NumericFilterForm() {
-  const { addNumericFilter } = useFilter();
-
   const [numericFilter, setNumericFilter] = useState({
     columnLabel: NUMERIC_COLUMN_LABELS[0],
     comparisonType: COMPARISON_TYPES[0],
     value: '0',
   });
+
+  const [unfilteredColumnLabels, setUnfilteredColumnLabels] = useState([]);
+  const { activeNumericFilters, addNumericFilter } = useFilter();
+
+  useEffect(() => {
+    const filteredColumnLabels = activeNumericFilters.map(({ columnLabel }) => (
+      columnLabel
+    ));
+    setUnfilteredColumnLabels(
+      NUMERIC_COLUMN_LABELS.filter((numericColumnLabel) => (
+        !filteredColumnLabels.includes(numericColumnLabel)
+      )),
+    );
+  }, [activeNumericFilters]);
+
+  useEffect(() => {
+    setNumericFilter((prevState) => ({
+      ...prevState,
+      columnLabel: unfilteredColumnLabels.length > 0 ? unfilteredColumnLabels[0] : '',
+    }));
+  }, [unfilteredColumnLabels]);
 
   function handleInputChange({ target: { name, value } }) {
     setNumericFilter((prevState) => ({
@@ -33,7 +52,9 @@ export default function NumericFilterForm() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    addNumericFilter(numericFilter);
+    if (numericFilter.columnLabel !== '') {
+      addNumericFilter(numericFilter);
+    }
   }
 
   return (
@@ -44,7 +65,7 @@ export default function NumericFilterForm() {
         onChange={ handleInputChange }
         data-testid="column-filter"
       >
-        {NUMERIC_COLUMN_LABELS.map((label) => (
+        {unfilteredColumnLabels.map((label) => (
           <option key={ label } value={ label }>
             {label}
           </option>

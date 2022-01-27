@@ -20,10 +20,11 @@ function isPlanetFilterable(numericFilters, planet) {
 
 export default function PlanetTable() {
   const { planets } = usePlanet();
-  const { numericFilters, nameToFilterBy } = useFilter();
+  const { activeNumericFilters, nameToFilterBy } = useFilter();
 
   const filteredPlanets = planets.filter((planet) => (
-    isPlanetFilterable(numericFilters, planet) && planet.name.includes(nameToFilterBy)
+    isPlanetFilterable(activeNumericFilters, planet)
+    && planet.name.includes(nameToFilterBy)
   ));
 
   return (
