@@ -15,6 +15,12 @@ export function FilterProvider({ children }) {
     setActiveNumericFilters([...activeNumericFilters, numericFilter]);
   }
 
+  function removeNumericFilter(columnLabel) {
+    setActiveNumericFilters(activeNumericFilters.filter((activeNumericFilter) => (
+      activeNumericFilter.columnLabel !== columnLabel
+    )));
+  }
+
   return (
     <FilterContext.Provider
       value={ {
@@ -22,6 +28,7 @@ export function FilterProvider({ children }) {
         setNameToFilterBy,
         activeNumericFilters,
         addNumericFilter,
+        removeNumericFilter,
       } }
     >
       {children}
