@@ -1,7 +1,10 @@
 import React from 'react';
-import PlanetRow from './PlanetRow';
-import { usePlanet } from '../context/PlanetContext';
 import { useFilter } from '../context/FilterContext';
+import { usePlanet } from '../context/PlanetContext';
+import PlanetRow from './PlanetRow';
+
+const SORT_FIRST_BEFORE_SECOND = -1;
+const SORT_SECOND_BEFORE_FIRST = 1;
 
 function isPlanetFilterable(numericFilters, planet) {
   return numericFilters.every(({ columnLabel, comparisonType, value }) => {
@@ -20,12 +23,34 @@ function isPlanetFilterable(numericFilters, planet) {
 
 export default function PlanetTable() {
   const { planets } = usePlanet();
-  const { activeNumericFilters, nameToFilterBy } = useFilter();
+  const { nameToFilterBy, activeNumericFilters, activeSorting } = useFilter();
 
   const filteredPlanets = planets.filter((planet) => (
-    isPlanetFilterable(activeNumericFilters, planet)
-    && planet.name.includes(nameToFilterBy)
+    planet.name.includes(nameToFilterBy)
+    && isPlanetFilterable(activeNumericFilters, planet)
   ));
+
+  switch (activeSorting.order) {
+  case 'ASC':
+    filteredPlanets.sort((firstPlanet, secondPlanet) => (
+      firstPlanet[activeSorting.columnLabel] - secondPlanet[activeSorting.columnLabel]
+    ));
+    break;
+
+  case 'DESC':
+    filteredPlanets.sort((firstPlanet, secondPlanet) => (
+      secondPlanet[activeSorting.columnLabel] - firstPlanet[activeSorting.columnLabel]
+    ));
+    break;
+
+  default:
+    filteredPlanets.sort((firstPlanet, secondPlanet) => (
+      firstPlanet.name < secondPlanet.name
+        ? SORT_FIRST_BEFORE_SECOND
+        : SORT_SECOND_BEFORE_FIRST
+    ));
+    break;
+  }
 
   return (
     <table>
