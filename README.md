@@ -15,7 +15,7 @@ Com o repositório clonado e dentro de um terminal:
 1. Entre na pasta do repositório:
 
 ```
-cd project-starwars-planets-search/
+cd starwars-planets-search/
 ```
 
 2. Instale as dependências:
